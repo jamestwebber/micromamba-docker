@@ -20,7 +20,7 @@ ENV MAMBA_ROOT_PREFIX=/opt/conda
 # executing commands with /bin/bash -c
 # Needed to have the micromamba activate command configured etc.
 ENV BASH_ENV /root/.bashrc
-SHELL ["/bin/bash", "-c"]
+SHELL ["/bin/bash", "--login", "-c"]
 
 # Setting $BASH_ENV and the SHELL command will not result in .bashrc being sourced when
 # you supply the program to run as an argument to the "docker run" command.
@@ -29,6 +29,7 @@ ENV PATH "$MAMBA_ROOT_PREFIX/bin:$PATH"
 
 COPY --from=stage1 /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 COPY --from=stage1 /tmp/bin/micromamba /bin/micromamba
+COPY entrypoint.sh /usr/bin/entrypoint.sh
 
 RUN ln -s /bin/micromamba /bin/mamba && \
     ln -s /bin/micromamba /bin/conda && \
@@ -37,4 +38,5 @@ RUN ln -s /bin/micromamba /bin/mamba && \
     /bin/micromamba shell init -s bash -p $MAMBA_ROOT_PREFIX && \
     echo "micromamba activate base" >> /root/.bashrc
 
+ENTRYPOINT ["/usr/bin/entrypoint.sh"]
 CMD ["/bin/bash"]
