@@ -3,7 +3,7 @@ ARG BASE_IMAGE=debian:buster-slim
 # Mutli-stage build to keep final image small. Otherwise end up with
 # curl and openssl installed
 FROM debian:buster-slim AS stage1
-ARG VERSION=0.8.2
+ARG VERSION=0.11.1
 RUN apt-get update && apt-get install -y \
     bzip2 \
     ca-certificates \
@@ -33,7 +33,6 @@ COPY --from=stage1 /tmp/bin/micromamba /bin/micromamba
 RUN ln -s /bin/micromamba /bin/mamba && \
     ln -s /bin/micromamba /bin/conda && \
     ln -s /bin/micromamba /bin/miniconda && \
-    /bin/micromamba shell init -s bash -p $MAMBA_ROOT_PREFIX && \
-    echo "micromamba activate base" >> /root/.bashrc
+    /bin/micromamba shell init -s bash -p $MAMBA_ROOT_PREFIX
 
 CMD ["/bin/bash"]
