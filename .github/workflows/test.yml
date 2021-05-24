@@ -24,3 +24,5 @@ jobs:
           push: false
       - name: Run tests
         run: ./test.sh
+        env:
+          BUILDPLATFORM: linux/amd64
