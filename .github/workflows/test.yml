@@ -25,4 +25,4 @@ jobs:
       - name: Run tests
         run: ./test.sh
         env:
-          BUILDPLATFORM: linux/amd64
+          DOCKER_BUILDKIT: 1
